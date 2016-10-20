@@ -120,7 +120,7 @@ void  Lcd3Dot5Digits::SendBit_1621(uchar sdata,uchar cnt) //High bit first
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void  Lcd3Dot5Digits::HT1621_all_on(void) 
+void  Lcd3Dot5Digits::display_all_on(void) 
 { 
 	uchar i; 
 	uchar addr=LCD_reg_map_start_adress; 
@@ -132,7 +132,7 @@ void  Lcd3Dot5Digits::HT1621_all_on(void)
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-void  Lcd3Dot5Digits::HT1621_all_off(void) 
+void  Lcd3Dot5Digits::display_all_off(void) 
 { 
 	uchar i; 
         uchar addr=LCD_reg_map_start_adress; 
@@ -223,5 +223,32 @@ void Lcd3Dot5Digits::display_H_as_last_digit(void)
 	data = 0x76;
 	//write the data to the LCD
 	send8bits(4,data);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void Lcd3Dot5Digits::display_C_as_last_digit(void)
+{
+	uchar data;
+	// set the data to display the correct digit on 7 segment LCD
+	data = 0x59;
+	//write the data to the LCD
+	send8bits(4,data);
+}
+////////////////////////////////////////////////////////////////////////////////
+void Lcd3Dot5Digits::display_float(float num)
+{
+	
+	uchar twoFirstDigits;
+	uchar thirdDigit;
+	uchar lastDigit;
+	
+	if(num > 199.9 || num < 0)return;
+	twoFirstDigits = num/10;
+	thirdDigit = num - (10 * twoFirstDigits);
+	lastDigit = (num - (10 * twoFirstDigits) - thirdDigit)*10;
+	
+  	display_2_first_digits(twoFirstDigits);
+  	display_third_digit(thirdDigit);
+  	display_last_digit(lastDigit);
 }
 
